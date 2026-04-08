@@ -224,3 +224,284 @@ For production use, additional work is required:
 ## 10. Conclusion
 
 EmergBlood demonstrates how blockchain can operationalize research ideas in blood supply chain management. By combining on-chain traceability, emergency workflows, and donor incentives, the system shows a practical path toward more transparent and responsive blood donation ecosystems with meaningful real-world healthcare impact.
+
+---
+
+## 11. Getting Started & Installation
+
+### Prerequisites
+
+Ensure you have installed:
+
+- **Node.js** (v16 or higher): https://nodejs.org/
+- **npm** (comes with Node.js)
+- **MetaMask Browser Extension** (optional, for production testing)
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/PrithviKiran791/Blockchain_blood_donation-.git
+cd Blockchain_blood_donation-
+```
+
+### Step 2: Install Dependencies
+
+```bash
+npm install
+```
+
+This installs:
+- Hardhat (local blockchain framework)
+- ethers.js (Web3 library)
+- All required dependencies
+
+### Step 3: Start the Local Hardhat Blockchain Node
+
+In a **new terminal window**, run:
+
+```bash
+npm run node
+```
+
+**Expected output:**
+```
+Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/
+Accounts:
+0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000 ETH)
+0x70997970C51812e339D9B73b0245ad59ca3534E5 (10000 ETH)
+...
+```
+
+**Keep this terminal running** (do not close). The blockchain will stay active on port 8545.
+
+### Step 4: Compile the Smart Contract
+
+In a **new terminal window**, run:
+
+```bash
+npm run compile
+```
+
+**Expected output:**
+```
+Compiled 1 Solidity file successfully (evm target: paris).
+```
+
+### Step 5: Deploy the Smart Contract
+
+In the **same terminal**, run:
+
+```bash
+npm run deploy
+```
+
+**Expected output:**
+```
+🩸 Deploying EmergBlood contract...
+
+📋 Deployer (Admin): 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+💰 Balance: 9999.996126489666015625 ETH
+
+═══════════════════════════════════════════════════════════════════
+✅ EmergBlood deployed successfully!
+📍 Contract Address: 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+👑 Admin Address:    0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+═══════════════════════════════════════════════════════════════════
+```
+
+**⚠️ Save the Contract Address** (you'll need it in Step 7).
+
+### Step 6: Open the Frontend
+
+Open the HTML file in your browser:
+
+**Windows (PowerShell):**
+```bash
+Start-Process ".\emergblood.html"
+```
+
+**macOS (Terminal):**
+```bash
+open emergblood.html
+```
+
+**Linux (Terminal):**
+```bash
+xdg-open emergblood.html
+```
+
+Or manually navigate to:
+```
+file:///C:/Users/prith/Desktop/My Projects/Blockchain/emergblood.html
+```
+
+### Step 7: Connect Wallet & Smart Contract
+
+1. **Click the "Connect Wallet" button** in the top-right corner
+   - If MetaMask is installed, it will prompt you to connect
+   - If not, it auto-connects to the local Hardhat RPC (http://127.0.0.1:8545)
+
+2. **A red banner appears**: "Connect to Smart Contract"
+   - Paste the **Contract Address** from Step 5 into the text field
+   - Click **"Connect Contract"**
+
+3. **You should see the Dashboard** with:
+   - 0 Registered Donors
+   - 0 Blood Units
+   - 0 Emergency Requests
+   - 0 Successful Matches
+
+### Step 8: Test the Application
+
+#### Register as a Donor:
+
+1. Click **"Register Donor"** tab
+2. Fill in:
+   - Full Name: `John Doe`
+   - Blood Type: `O+`
+   - Location: `New York`
+3. Click **"Register on Blockchain"**
+4. A transaction will be sent
+5. Check the Dashboard - **"Registered Donors" should now be 1**
+
+#### Register a Blood Unit (Admin Only):
+
+1. Click **"Blood Units"** tab
+2. Fill in:
+   - Donor Wallet Address: `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` (from Step 5)
+   - Blood Type: `O+`
+   - QR Code Hash: (leave empty or enter any text)
+3. Click **"Register Blood Unit"**
+4. Dashboard will update - **"Blood Units" should now be 1**
+
+#### Post an Emergency Request:
+
+1. Click **"Emergency"** tab
+2. Fill in:
+   - Hospital Name: `City General Hospital`
+   - Blood Type Needed: `O+`
+   - Units Needed: `2`
+   - Validity Period: `4` hours
+3. Click **"Post Emergency Request"**
+4. Dashboard will update - **"Emergency Requests" should now be 1**
+5. You'll see a countdown timer 
+
+#### Match Blood to Request (Admin Only):
+
+1. Click **"Match Blood"** tab
+2. Select:
+   - Emergency Request: The hospital request you just created
+   - Blood Unit: The O+ unit you registered
+3. Click **"Match & Reward Donor"**
+4. If successful:
+   - Request progress increases
+   - Donor earns reward points
+   - Dashboard counts update
+   - Transaction appears in log
+
+#### View Your Profile:
+
+1. Click **"My Profile"** tab
+2. You'll see:
+   - Your donor information
+   - Blood type
+   - Location
+   - Reward points earned
+   - Wallet address
+
+---
+
+## 12. Command Reference
+
+| Command | Purpose |
+|---------|---------|
+| `npm install` | Install all dependencies |
+| `npm run node` | Start local Hardhat blockchain |
+| `npm run compile` | Compile Solidity smart contract |
+| `npm run deploy` | Deploy contract to local blockchain |
+
+---
+
+## 13. Troubleshooting
+
+### Issue: "Failed to connect to contract"
+
+**Solution:**
+- Ensure Hardhat node is running (`npm run node`)
+- Verify the contract address is correct
+- Check that MetaMask is connected to localhost chain ID 31337
+
+To switch MetaMask manually:
+1. Open MetaMask
+2. Click network dropdown
+3. Click "Add Network"
+4. Fill in:
+   - Network Name: `Hardhat Localhost`
+   - RPC URL: `http://127.0.0.1:8545`
+   - Chain ID: `31337`
+   - Currency: `ETH`
+
+### Issue: Port 8545 Already in Use
+
+**Solution:**
+```bash
+# Find process using port 8545
+netstat -ano | findstr :8545
+
+# Kill process (replace PID with actual process ID)
+taskkill /PID <PID> /F
+
+# Try running node again
+npm run node
+```
+
+### Issue: "Quantity must be greater than 0"
+
+**Solution:** Ensure all numeric fields have values > 0
+
+### Issue: "You must be a registered donor"
+
+**Solution:** Register as a donor first via the "Register Donor" tab
+
+### Issue: Transactions Not Appearing
+
+**Solution:**
+- Ensure you're connected to the correct contract
+- Check browser console (F12) for error messages
+- Refresh the page and reconnect
+
+---
+
+## 14. Project Structure
+
+```
+Blockchain_blood_donation-/
+├── contracts/
+│   └── EmergBlood.sol              (Smart contract source)
+├── scripts/
+│   └── deploy.js                   (Deployment script)
+├── icons/                          (UI icon images)
+├── artifacts/                      (Compiled contract artifacts)
+├── app.js                          (Frontend application logic)
+├── emergblood.html                 (HTML structure)
+├── styles.css                      (Red & black theme styling)
+├── hardhat.config.js               (Hardhat configuration)
+├── package.json                    (Project dependencies)
+├── README.md                       (This file)
+└── .gitignore                      (Git ignore rules)
+```
+
+---
+
+## 15. Key Features Checklist
+
+- ✅ Donor registration with blockchain storage
+- ✅ Blood unit lifecycle tracking (42-day expiry)
+- ✅ Emergency request posting with countdown timers
+- ✅ Admin-controlled blood matching workflow
+- ✅ Donor reward points system
+- ✅ Real-time dashboard with statistics
+- ✅ Transaction logging
+- ✅ Red & black modern UI theme
+- ✅ MetaMask wallet integration
+- ✅ Hardhat local blockchain support
