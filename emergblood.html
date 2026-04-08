@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EmergBlood – Blockchain-Based Emergency Blood Donation Network. Transparent, tamper-proof tracking of blood donors and emergency requests using Ethereum smart contracts." />
+  <title>EmergBlood – Emergency Blood Donation Network</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="blood-drop"></div>
+      <span>EmergBlood</span>
+      <span class="admin-badge" id="adminBadge" style="display:none"><img src="icons/images (1).png" alt="admin" class="icon-emoji-small" /> Admin</span>
+    </div>
+    <button class="wallet-btn" id="walletBtn" onclick="connectWallet()">
+      <span class="dot"></span>
+      Connect Wallet
+    </button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="dashboard"><img src="icons/images.png" alt="dashboard" class="icon-emoji" /> Dashboard</button>
+    <button class="nav-tab" data-tab="registerDonor"><img src="icons/customer-icon-for-your-website-design-logo-app-ui-free-vector.jpg" alt="donor" class="icon-emoji" /> Register Donor</button>
+    <button class="nav-tab" data-tab="registerUnit"><img src="icons/red-droplets-glyph-style_78370-4807.avif" alt="blood" class="icon-emoji" /> Blood Units</button>
+    <button class="nav-tab" data-tab="emergency"><img src="icons/siren-icon-emergency-symbol-ambulance-sign-isolate-on-white-background-for-graphic-design-logo-web-site-social-media-mobile-app-ui-vector.jpg" alt="emergency" class="icon-emoji" /> Emergency</button>
+    <button class="nav-tab" data-tab="match"><img src="icons/484167.png" alt="match" class="icon-emoji" /> Match Blood</button>
+    <button class="nav-tab" data-tab="profile"><img src="icons/images (1).png" alt="profile" class="icon-emoji" /> My Profile</button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Connection Banner -->
+    <div class="connection-banner" id="connectionBanner">
+      <h3><img src="icons/484167.png" alt="connect" class="icon-emoji-small" /> Connect to Smart Contract</h3>
+      <p>Enter the deployed EmergBlood contract address to get started.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:600px;margin:0 auto">
+        <input type="text" class="form-input" id="contractAddressInput" placeholder="0x..." style="flex:1;min-width:250px" />
+        <button class="btn btn-primary" onclick="setContractAddress()">Connect Contract</button>
+      </div>
+    </div>
+
+    <!-- ═══ Dashboard Tab ═══ -->
+    <div class="tab-panel active" id="dashboard">
+      <h1 class="section-title">Dashboard</h1>
+      <p class="section-subtitle">Real-time blockchain statistics for the blood donation network</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><img src="icons/customer-icon-for-your-website-design-logo-app-ui-free-vector.jpg" alt="donors" class="icon-stat" /></div>
+          <div class="stat-value" id="statDonors">0</div>
+          <div class="stat-label">Registered Donors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><img src="icons/red-droplets-glyph-style_78370-4807.avif" alt="blood" class="icon-stat" /></div>
+          <div class="stat-value" id="statUnits">0</div>
+          <div class="stat-label">Blood Units</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><img src="icons/siren-icon-emergency-symbol-ambulance-sign-isolate-on-white-background-for-graphic-design-logo-web-site-social-media-mobile-app-ui-vector.jpg" alt="emergency" class="icon-stat" /></div>
+          <div class="stat-value" id="statRequests">0</div>
+          <div class="stat-label">Emergency Requests</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><img src="icons/images (1).png" alt="matches" class="icon-stat" /></div>
+          <div class="stat-value" id="statMatches">0</div>
+          <div class="stat-label">Successful Matches</div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin-bottom:0.75rem"><img src="icons/images.png" alt="log" class="icon-emoji-small" /> Transaction Log</h3>
+        <div class="tx-log" id="txLog">
+          <div class="empty-state"><p>No transactions recorded in this session yet.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Register Donor Tab ═══ -->
+    <div class="tab-panel" id="registerDonor">
+      <h1 class="section-title">Register as Donor</h1>
+      <p class="section-subtitle">Join the blockchain-powered blood donation network and earn rewards</p>
+
+      <div class="glass-card" style="max-width:600px">
+        <form id="donorForm">
+          <div class="form-group">
+            <label class="form-label" for="donorName">Full Name</label>
+            <input type="text" class="form-input" id="donorName" placeholder="Enter your full name" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="donorBloodType">Blood Type</label>
+              <select class="form-select" id="donorBloodType" required>
+                <option value="">Select blood type</option>
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="donorLocation">Location</label>
+              <input type="text" class="form-input" id="donorLocation" placeholder="City / Area" required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">
+            <span class="spinner"></span>
+            <span class="btn-text">Register on Blockchain</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ Blood Units Tab ═══ -->
+    <div class="tab-panel" id="registerUnit">
+      <h1 class="section-title">Blood Units</h1>
+      <p class="section-subtitle">Register and track donated blood units with 42-day expiry tracking</p>
+
+      <div class="glass-card" style="max-width:600px;margin-bottom:2rem">
+        <h3 style="margin-bottom:1rem;font-size:1rem;color:var(--text-secondary)">Register New Blood Unit (Admin Only)</h3>
+        <form id="bloodUnitForm">
+          <div class="form-group">
+            <label class="form-label" for="unitDonorAddress">Donor Wallet Address</label>
+            <input type="text" class="form-input" id="unitDonorAddress" placeholder="0x..." required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="unitBloodType">Blood Type</label>
+              <select class="form-select" id="unitBloodType" required>
+                <option value="">Select type</option>
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="unitQrHash">QR Code Hash (optional)</label>
+              <input type="text" class="form-input" id="unitQrHash" placeholder="Auto-generated if empty" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">
+            <span class="spinner"></span>
+            <span class="btn-text">Register Blood Unit</span>
+          </button>
+        </form>
+      </div>
+
+      <h3 style="margin-bottom:1rem">All Blood Units</h3>
+      <div id="unitsList">
+        <div class="empty-state"><div class="empty-icon"><img src="icons/red-droplets-glyph-style_78370-4807.avif" alt="blood" class="icon-empty" /></div><p>No blood units registered yet</p></div>
+      </div>
+    </div>
+
+    <!-- ═══ Emergency Requests Tab ═══ -->
+    <div class="tab-panel" id="emergency">
+      <h1 class="section-title">Emergency Requests</h1>
+      <p class="section-subtitle">Post time-bound urgent blood requests — every minute counts</p>
+
+      <div class="glass-card" style="max-width:600px;margin-bottom:2rem">
+        <h3 style="margin-bottom:1rem;font-size:1rem;color:var(--text-secondary)">Post New Emergency Request</h3>
+        <form id="emergencyForm">
+          <div class="form-group">
+            <label class="form-label" for="hospitalName">Hospital Name</label>
+            <input type="text" class="form-input" id="hospitalName" placeholder="Enter hospital name" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="reqBloodType">Required Blood Type</label>
+              <select class="form-select" id="reqBloodType" required>
+                <option value="">Select type</option>
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reqQuantity">Units Needed</label>
+              <input type="number" class="form-input" id="reqQuantity" min="1" max="100" placeholder="e.g. 3" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reqValidity">Validity Period (hours)</label>
+            <input type="number" class="form-input" id="reqValidity" min="1" max="72" placeholder="e.g. 4" required />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">
+            <span class="spinner"></span>
+            <img src="icons/siren-icon-emergency-symbol-ambulance-sign-isolate-on-white-background-for-graphic-design-logo-web-site-social-media-mobile-app-ui-vector.jpg" alt="emergency" class="icon-emoji-small" />
+            <span class="btn-text">Post Emergency Request</span>
+          </button>
+        </form>
+      </div>
+
+      <h3 style="margin-bottom:1rem">Active Requests</h3>
+      <div id="requestsList">
+        <div class="empty-state"><div class="empty-icon"><img src="icons/siren-icon-emergency-symbol-ambulance-sign-isolate-on-white-background-for-graphic-design-logo-web-site-social-media-mobile-app-ui-vector.jpg" alt="emergency" class="icon-empty" /></div><p>No emergency requests yet</p></div>
+      </div>
+    </div>
+
+    <!-- ═══ Match Blood Tab ═══ -->
+    <div class="tab-panel" id="match">
+      <h1 class="section-title">Match Blood</h1>
+      <p class="section-subtitle">Match available blood units to emergency requests (Admin Only)</p>
+
+      <form id="matchForm">
+        <div class="match-grid">
+          <div class="match-select-card">
+            <h3><img src="icons/siren-icon-emergency-symbol-ambulance-sign-isolate-on-white-background-for-graphic-design-logo-web-site-social-media-mobile-app-ui-vector.jpg" alt="emergency" class="icon-emoji-small" /> Select Emergency Request</h3>
+            <select class="form-select" id="matchRequestId" required>
+              <option value="">Loading requests...</option>
+            </select>
+          </div>
+          <div class="match-select-card">
+            <h3><img src="icons/red-droplets-glyph-style_78370-4807.avif" alt="blood" class="icon-emoji-small" /> Select Blood Unit</h3>
+            <select class="form-select" id="matchUnitId" required>
+              <option value="">Loading units...</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">
+          <span class="spinner"></span>
+          <img src="icons/484167.png" alt="match" class="icon-emoji-small" />
+          <span class="btn-text">Match & Reward Donor</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- ═══ Profile Tab ═══ -->
+    <div class="tab-panel" id="profile">
+      <h1 class="section-title">My Profile</h1>
+      <p class="section-subtitle">Your donor information and reward points</p>
+      <div id="profileContent">
+        <div class="empty-state"><div class="empty-icon"><img src="icons/customer-icon-for-your-website-design-logo-app-ui-free-vector.jpg" alt="profile" class="icon-empty" /></div><p>Connect your wallet to view your profile</p></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ethers.js v6 CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
